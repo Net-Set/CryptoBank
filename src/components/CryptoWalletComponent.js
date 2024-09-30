@@ -1,4 +1,3 @@
-// src/components/CryptoWalletComponent.js
 import React, { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import contractABI from "../abi/cryptoCurrency.json";
@@ -7,30 +6,34 @@ import ConnectWallet from './ConnectWallet';
 // Set your contract address here
 const contractAddress = "0x5236Fb1FD0c0e6f3aE9Fc904141aC188F5b0F677";
 
-const CryptoWalletComponent = ({ provider, signer }) => {
+const CryptoWalletComponent = ({ provider, signer, account }) => {
     const [ethBalance, setEthBalance] = useState(0);
     const [tokenBalance, setTokenBalance] = useState(0);
-    const [amount, setAmount] = useState(0);
+    const [amount, setAmount] = useState('');
     const [recipient, setRecipient] = useState("");
-    const [account, setAccount] = useState('');
+    const [signerState, setSigner] = useState(signer); // State to manage signer
+    const [accountState, setAccount] = useState(account); // State to manage account
 
     // Create the contract instance using ethers.js
-    const walletContract = new ethers.Contract(contractAddress, contractABI, signer);
+    const walletContract = new ethers.Contract(contractAddress, contractABI, signerState);
 
+    // Fetch ETH and Token balances when the signer or account changes
     useEffect(() => {
-        if (signer) {
-            getBalances(); // Fetch balances when signer changes
+        if (signerState && accountState) {
+            getBalances(); // Fetch balances when signer/account changes
         }
-    }, [signer]);
+    }, [signerState, accountState]);
 
     const getBalances = async () => {
         try {
-            const ethBalance = await signer.getBalance();
-            const tokenBalance = await walletContract.balanceOf(await signer.getAddress());
+            // Fetch ETH balance using the smart contract
+            const ethBalance = await walletContract.getEthBalance(accountState);
+            // Fetch token balance using the smart contract
+            const tokenBalance = await walletContract.getTokenBalance(accountState);
 
             // Format balances and update state
             setEthBalance(ethers.formatEther(ethBalance));
-            setTokenBalance(tokenBalance.toString());
+            setTokenBalance(ethers.formatUnits(tokenBalance, 18)); // Assuming token has 18 decimals
         } catch (error) {
             console.error("Error fetching balances:", error);
         }
@@ -41,7 +44,7 @@ const CryptoWalletComponent = ({ provider, signer }) => {
             const tx = await transactionFn();
             await tx.wait();
             alert(successMessage);
-            getBalances();
+            getBalances(); // Refresh balances after a successful transaction
         } catch (error) {
             console.error("Transaction failed:", error);
             alert("Transaction failed!");

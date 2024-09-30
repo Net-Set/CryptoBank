@@ -45,3 +45,19 @@
 }
 
 
+/* src/components/ResponsiveNavbar.css */
+
+body.dark-mode {
+  background-color: #121212; /* Dark background */
+  color: white; /* Light text color */
+}
+
+.navbar-dark {
+  background-color: #343a40; /* Dark navbar background */
+}
+
+.navbar-light {
+  background-color: #f8f9fa; /* Light navbar background */
+}
+
+/* Other dark mode styles as needed */

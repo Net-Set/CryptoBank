@@ -92,7 +92,15 @@ const CryptoWalletComponent = ({ provider, signer, account, isDarkMode }) => {
     );
 
     return (
-        <div className={`container mt-4 ${isDarkMode ? 'bg-dark text-white' : 'bg-light text-black'}`} style={{ borderRadius: '5px', padding: '20px' }}>
+        <div 
+            className={`container mt-4 ${isDarkMode ? 'bg-dark text-white' : 'bg-light text-black'}`} 
+            style={{ 
+                borderRadius: '5px', 
+                padding: '20px', 
+                boxShadow: isDarkMode ? '0 4px 15px rgba(255, 255, 255, 0.1)' : '0 4px 15px rgba(0, 0, 0, 0.1)', 
+                transition: 'all 0.3s ease-in-out'
+            }}
+        >
             <h2 className="text-center">Crypto Wallet</h2>
             <button className="btn btn-primary mb-3" onClick={getBalances}>Refresh Balances</button>
             <div className="mb-4">

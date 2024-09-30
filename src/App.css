@@ -61,3 +61,17 @@ body.dark-mode {
 }
 
 /* Other dark mode styles as needed */
+
+
+/* Custom placeholder color for dark and light modes */
+input::placeholder {
+  color: #888; /* Default placeholder color */
+}
+
+.bg-dark input::placeholder {
+  color: #bbb; /* Placeholder color for dark mode */
+}
+
+.bg-light input::placeholder {
+  color: #555; /* Placeholder color for light mode */
+}

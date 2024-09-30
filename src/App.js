@@ -21,6 +21,7 @@ function App() {
   const [provider, setProvider] = useState(null);
   const [signer, setSigner] = useState(null);
   const [account, setAccount] = useState('');
+  const [isDarkMode, setIsDarkMode] = useState(true); // Add dark mode state
 
   const connectWallet = async () => {
     if (window.ethereum) {
@@ -39,23 +40,27 @@ function App() {
     }
   };
 
+  const toggleDarkMode = () => {
+    setIsDarkMode((prevMode) => !prevMode);
+  };
+
   return (
     <Router>
       <div className="App">
-        <NavBar account={account} onConnectWallet={connectWallet} />
+        <NavBar account={account} onConnectWallet={connectWallet} toggleDarkMode={toggleDarkMode} isDarkMode={isDarkMode} />
         <div className="container mt-5">
           <Routes>
             <Route 
               path="/" 
               element={
                 signer ? (
-                  <CryptoWalletComponent provider={provider} signer={signer} />
+                  <CryptoWalletComponent provider={provider} signer={signer} account={account}  isDarkMode={isDarkMode} />
                 ) : (
                   <ConnectWalletMessage onConnectWallet={connectWallet} />
                 )
               } 
             />
-            <Route path="/about" element={<About />} />
+            <Route path="/about" element={<About isDarkMode={isDarkMode} />} /> {/* Pass isDarkMode prop */}
           </Routes>
         </div>
       </div>
